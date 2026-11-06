@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Review resume content and get practical, rule-based improvement suggestions.">
+  <title>AI Resume Feedback Assistant</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ResumeWise home"><span class="brand-mark">R</span> ResumeWise</a>
+    <div class="top-actions"><span id="account-label" class="muted"></span><button id="logout-btn" class="button button-ghost hidden" type="button">Log out</button></div>
+  </header>
+  <main class="shell">
+    <section id="auth-view" class="auth-layout">
+      <div class="hero-copy">
+        <p class="eyebrow">YOUR NEXT STEP STARTS HERE</p>
+        <h1>Make your resume<br><span>work harder.</span></h1>
+        <p class="lead">Get a clear checklist, skill-match insights, and practical ways to strengthen your resume before you apply.</p>
+        <div class="feature-list">
+          <div><span class="feature-icon">✓</span><span><strong>Useful feedback</strong><small>Find missing sections and content opportunities.</small></span></div>
+          <div><span class="feature-icon">↗</span><span><strong>Job-description match</strong><small>Compare skills mentioned in your resume.</small></span></div>
+          <div><span class="feature-icon">▤</span><span><strong>Saved reviews</strong><small>Return to your previous analyses anytime.</small></span></div>
+        </div>
+      </div>
+      <section class="panel auth-panel">
+        <div class="tab-row" role="tablist" aria-label="Account options">
+          <button class="tab active" id="login-tab" role="tab" aria-selected="true" type="button">Log in</button>
+          <button class="tab" id="register-tab" role="tab" aria-selected="false" type="button">Create account</button>
+        </div>
+        <h2 id="auth-heading">Welcome back</h2>
+        <p id="auth-description" class="muted">Log in to continue to your dashboard.</p>
+        <form id="auth-form">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required placeholder="At least 8 characters">
+          <button id="auth-submit" class="button button-primary full" type="submit">Log in</button>
+          <p id="auth-message" class="message" role="status" aria-live="polite"></p>
+        </form>
+        <p class="tiny-note">Your account is managed by Supabase Auth. Use a unique password.</p>
+      </section>
+    </section>
+
+    <section id="app-view" class="hidden">
+      <div class="dashboard-heading">
+        <div><p class="eyebrow">RESUME WORKSPACE</p><h1>Resume feedback</h1><p class="lead">Review your resume content and make your next edit count.</p></div>
+        <div class="mini-stat"><span class="stat-icon">✦</span><span><strong id="review-count">0</strong><small>saved reviews</small></span></div>
+      </div>
+      <div class="dashboard-grid">
+        <section class="panel review-form-panel">
+          <div class="panel-heading"><div><h2>Start a review</h2><p class="muted">Paste plain text from your resume.</p></div><span class="step-pill">01 / REVIEW</span></div>
+          <form id="review-form">
+            <label for="resume-text">Resume text <span class="required">*</span></label>
+            <textarea id="resume-text" name="resumeText" rows="12" minlength="80" maxlength="12000" required placeholder="Paste your resume here: summary, education, skills, projects, experience, and achievements..."></textarea>
+            <div class="field-meta"><span>At least 80 characters</span><span id="resume-length">0 / 12000</span></div>
+            <label for="job-description">Target job description <span class="optional">(optional)</span></label>
+            <textarea id="job-description" name="jobDescription" rows="6" maxlength="8000" placeholder="Paste the internship or job description to compare skills..."></textarea>
+            <div class="field-meta"><span>Include the job's key responsibilities and skills.</span><span id="job-length">0 / 8000</span></div>
+            <div class="privacy-note"><span>ⓘ</span><p>Only paste information you are comfortable storing. Remove private addresses, phone numbers, and other details if not needed.</p></div>
+            <button id="analyze-btn" class="button button-primary full" type="submit">Analyze my resume <span aria-hidden="true">→</span></button>
+            <p id="review-message" class="message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+        <aside class="side-column">
+          <section class="panel tips-panel"><span class="section-icon">✧</span><h3>What gets checked?</h3><ul><li>Contact and profile details</li><li>Education, skills, projects and experience</li><li>Action-oriented wording and measurable results</li><li>Skills mentioned in the target job description</li></ul><p class="tiny-note">This is a rule-based educational checklist, not a real AI model or hiring prediction.</p></section>
+          <section class="panel history-panel"><div class="panel-heading"><div><h3>Recent reviews</h3><p class="muted">Your saved analyses</p></div><button id="refresh-history" class="icon-button" type="button" aria-label="Refresh review history" title="Refresh">↻</button></div><div id="history-list" class="history-list"><p class="muted">Log in to load your reviews.</p></div></section>
+        </aside>
+      </div>
+      <section id="results-panel" class="panel results-panel hidden" aria-live="polite">
+        <div class="panel-heading"><div><p class="eyebrow">YOUR REVIEW</p><h2>Analysis results</h2><p id="result-date" class="muted"></p></div><button id="clear-results" class="button button-ghost" type="button">Clear results</button></div>
+        <div class="results-overview">
+          <div class="score-card"><div class="score-ring" id="score-ring"><span><strong id="score-value">0</strong><small>/ 100</small></span></div><h3>Resume checklist score</h3><p id="score-summary" class="muted"></p></div>
+          <div class="section-card"><h3>Section checklist</h3><div id="section-results" class="checklist"></div></div>
+        </div>
+        <div class="results-columns">
+          <section class="result-box"><h3>Strengths</h3><ul id="strengths-list"></ul></section>
+          <section class="result-box"><h3>Suggested improvements</h3><ul id="suggestions-list"></ul></section>
+        </div>
+        <div class="skills-grid">
+          <section class="result-box"><h3>Skills found in resume</h3><div id="resume-skills" class="chips"></div></section>
+          <section class="result-box"><h3>Job description comparison</h3><p id="match-summary" class="muted"></p><div id="matched-skills" class="chips"></div><h4>Skills not detected</h4><div id="missing-skills" class="chips"></div></section>
+        </div>
+        <p class="tiny-note">Skill matching only checks a built-in vocabulary. A missing skill may be present under different wording. Never add a skill unless you genuinely have it.</p>
+      </section>
+    </section>
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+  </main>
+  <footer class="footer"><span>ResumeWise · AI Resume Feedback Assistant</span><span>Built for learning · No hiring guarantees</span></footer>
+</body>
+</html>

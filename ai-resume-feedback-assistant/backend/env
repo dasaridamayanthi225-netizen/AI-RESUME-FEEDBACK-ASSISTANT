@@ -1,0 +1,5 @@
+PORT=3000
+NODE_ENV=development
+SUPABASE_URL=https://ewogvuqxycmjhemlbavw.supabase.co
+SUPABASE_ANON_KEY=sb_publishable_wqyeQkiWmAQ9vwoFFNaSsg_hd0NoP0W
+1aHnBbfadWhMGxpsLCY+MEenrwzbwQUiD4Flu+7+nX7Ek/hy+u5wtVnlmaOR3qscEd4KbD9025rSj6klexc1GA==
